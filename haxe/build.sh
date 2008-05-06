@@ -2,7 +2,7 @@
 
 echo "Building haXe server..."
 export HAXE_LIBRARY_PATH="/usr/local/haxe/std:."
-haxe server.hxml
+haxe remoting.hxml
 
 echo ""
 echo "Compiling SWF..."

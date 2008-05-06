@@ -1,0 +1,7 @@
+-neko server.n
+-main Server
+
+--next
+
+-main Client
+-swf client.swf

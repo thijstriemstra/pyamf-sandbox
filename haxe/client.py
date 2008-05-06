@@ -15,6 +15,6 @@ from pyamf.remoting.client import RemotingService
 gateway = RemotingService('http://demo.pyamf.org/gateway/haxe')
 gateway.logger.setLevel(logging.DEBUG)
 
-haxe_service = gateway.getService('foo')
+haxe_service = gateway.getService('Server.foo')
 
 print haxe_service(1, 2) # prints '3'

@@ -3,5 +3,10 @@
 
 --next
 
+-neko amftest.n
+-main AMFTest
+
+--next
+
 -main Client
 -swf client.swf

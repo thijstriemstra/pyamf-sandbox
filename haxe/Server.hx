@@ -11,7 +11,7 @@ class Server {
         r.addObject("Server",new Server());
         if( r.handleRequest() )
             return;
-        // handle normal request
-        neko.Lib.print("This is a remoting server !");
+        // handle normal browser request
+        neko.Lib.print("haXe remoting gateway");
     } 
 }

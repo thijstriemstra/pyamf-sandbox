@@ -1,7 +1,8 @@
 = Using haXe and Python with AMF =
 
-1. Install haXe (http://haxe.org/compile)
-2. Make sure this directory is on the HAXE_LIBRARY_PATH
+1. Install haXe (http://haxe.org/compile) and PyAMF (http://pyamf.org/Install)
+2. Make sure the directory containing the haXe sample server is on the
+   HAXE_LIBRARY_PATH
 3. Compile the file by running: haxe server.hxml
 4. Enable mod_neko in Apache (http://haxe.org/tutos/mod_neko/ubuntu)
 5. Create an Alias in your vhost:
@@ -9,5 +10,8 @@
 6. Browse to http://yourserver.com/gateway/haxe which should print:
    haXe remoting gateway
 7. Start the client.py to test the Python/haXe communication
+8. (optional) If you have the Flex SDK installed, adjust the path
+   to the SDK in flex/build.xml and run ./build.sh which will compile
+   a SWF you can use to connect to the haXe remoting server.
 
-Thijs Triemstra, may 2008.
+Author: Thijs Triemstra, may 2008.

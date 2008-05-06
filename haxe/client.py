@@ -12,7 +12,7 @@ Example client for haXe/Python communication using AMF.
 import logging
 from pyamf.remoting.client import RemotingService
 
-gateway = RemotingService('http://localhost/gateway/haxe')
+gateway = RemotingService('http://demo.pyamf.org/gateway/haxe')
 gateway.logger.setLevel(logging.DEBUG)
 
 haxe_service = gateway.getService('foo')

@@ -5,10 +5,6 @@
 
 """
 Extracts and displays information for files that contain AMF data.
-
-@author: U{Arnar Birgisson<mailto:arnarbi@gmail.com>}
-@author: U{Thijs Triemstra<mailto:info@collab.nl>}
-@author: U{Nick Joyce<mailto:nick@boxdesign.co.uk>}
 """
 
 import glob

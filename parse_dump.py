@@ -23,6 +23,9 @@ def parse_options():
         default=False, help="Enable debugging")
     parser.add_option("--dump", action="store_true", dest="dump",
         default=False, help="Shows a hexdump of the file")
+    parser.add_option("--strict", action="store_true", dest="strict",
+        default=False, help="""Option to decode typed but unaliased classes """
+        """without raising UnknownClassAlias""")
 
     return parser.parse_args()
 
@@ -49,7 +52,7 @@ def main():
 
             try:
                 print "\nDecoding file:", fname
-                request = remoting.decode(body)
+                request = remoting.decode(body, None, options.strict)
 
                 if options.debug:
                     for name, message in request:

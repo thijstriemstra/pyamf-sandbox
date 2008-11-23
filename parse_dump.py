@@ -45,9 +45,11 @@ def main():
     """
     (options, args) = parse_options()
 
+    print 'Using pyamf from: %s' % (pyamf,)
+    print 'Strict = ' + str(options.strict)
+
     for arg in args:
         for fname in glob.glob(arg):
-
             body = read_file(fname)
 
             try:
@@ -57,11 +59,9 @@ def main():
                 if options.debug:
                     for name, message in request:
                         print "  %s: %s" % (name, message)
-
             except pyamf.UnknownClassAlias, c:
                 if options.debug:
                     print '\n    Warning: %s' % c
-                pass
             except:
                 raise
 

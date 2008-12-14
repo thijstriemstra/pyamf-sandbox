@@ -62,6 +62,9 @@ def main():
             except pyamf.UnknownClassAlias, c:
                 if options.debug:
                     print '\n    Warning: %s' % c
+            except pyamf.DecodeError, c:
+                if options.debug:
+                    print '\n    Warning: %s' % c
             except:
                 raise
 

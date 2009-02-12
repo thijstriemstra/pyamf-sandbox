@@ -9,6 +9,7 @@ Extracts and displays information for files that contain AMF data.
 
 import glob
 from optparse import OptionParser
+from fnmatch import fnmatch
 
 import pyamf
 from pyamf import remoting
@@ -50,29 +51,30 @@ def main():
 
     for arg in args:
         for fname in glob.glob(arg):
-            body = read_file(fname)
+            if fnmatch(fname, '*.amf*'):
+                body = read_file(fname)
 
-            try:
-                print "\nDecoding file:", fname
-                request = remoting.decode(body, None, options.strict)
+                try:
+                    print "\nDecoding file:", fname
+                    request = remoting.decode(body, None, options.strict)
 
-                if options.debug:
-                    for name, message in request:
-                        print "  %s: %s" % (name, message)
-            except pyamf.UnknownClassAlias, c:
-                if options.debug:
-                    print '\n    Warning: %s' % c
-            except pyamf.DecodeError, c:
-                if options.debug:
-                    print '\n    Warning: %s' % c
-            except:
-                raise
+                    if options.debug:
+                        for name, message in request:
+                            print "  %s: %s" % (name, message)
+                except pyamf.UnknownClassAlias, c:
+                    if options.debug:
+                        print '\n    Warning: %s' % c
+                except pyamf.DecodeError, c:
+                    if options.debug:
+                        print '\n    Warning: %s' % c
+                except:
+                    raise
 
-            if options.dump:
-                print
-                print pyamf.util.hexdump(body)
+                if options.dump:
+                    print
+                    print pyamf.util.hexdump(body)
 
-            print "-" * 80
+                print "-" * 80
 
 if __name__ == '__main__':
     main()

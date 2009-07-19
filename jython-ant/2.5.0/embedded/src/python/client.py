@@ -1,11 +1,18 @@
 """
-Hello world example client.
+Hello world example client for Apache Ant.
 """
+
+import logging
+logging.basicConfig(level=logging.INFO,
+           format='%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s')
+
 
 from pyamf.remoting.client import RemotingService
 
-gateway = RemotingService('http://localhost:8000')
+url = 'http://localhost:8000'
+gateway = RemotingService(url, logger=logging)
 
 echo_service = gateway.getService('echo.echo')
+result = echo_service('Hello world!')
 
-print echo_service('Hello world!')
+logging.info(result)

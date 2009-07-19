@@ -1,5 +1,5 @@
 """
-Hello world example server.
+Hello world example server for Apache Ant.
 """
 
 def echo(data):
@@ -8,16 +8,21 @@ def echo(data):
     """
     return data
 
-services = {
-    'echo.echo': echo
-}
 
 if __name__ == '__main__':
     import os
+    import logging
     from pyamf.remoting.gateway.wsgi import WSGIGateway
     from wsgiref import simple_server
 
-    gw = WSGIGateway(services)
+    logging.basicConfig(level=logging.DEBUG,
+           format='%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s')
+
+    services = {
+        'echo.echo': echo
+    }
+
+    gw = WSGIGateway(services, logger=logging)
 
     httpd = simple_server.WSGIServer(
         ('localhost', 8000),

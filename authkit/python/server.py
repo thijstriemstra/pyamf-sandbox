@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+#
+# Copyright (c) 2009 The PyAMF Project.
+# See LICENSE.txt for details.
 
 """
 This code demonstrates some of the features of authkit.authorize in combination
@@ -18,7 +21,7 @@ from pyamf.remoting.gateway.wsgi import WSGIGateway
 
 
 # Host and port to run the server on
-host_info = ('localhost', 8080)
+host_info = ('localhost', 8080, 'Test Realm')
 
 logging.basicConfig(level=logging.DEBUG,
         format='%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s')
@@ -99,7 +102,6 @@ if __name__ == '__main__':
     from paste.httpserver import serve
     from authkit.authenticate import middleware
 
-    realm = 'Test Realm'
     service = AuthService()
     
     # Configure the remoting services
@@ -110,7 +112,7 @@ if __name__ == '__main__':
     gw = WSGIGateway(services, logger=logging)
 
     app = httpexceptions.make_middleware(AuthorizeExampleApp())
-    app = middleware( app, setup_method='basic', basic_realm=realm, 
+    app = middleware( app, setup_method='basic', basic_realm=host_info[2], 
                       basic_authenticate_function=service.valid
     )
 

@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO,
 from pyamf.remoting.client import RemotingService
 
 url = 'http://localhost:8000'
-gateway = RemotingService(url, logger=logging)
+gateway = RemotingService(url, logger=logging, debug=True)
 
 echo_service = gateway.getService('echo.echo')
 result = echo_service('Hello world!')

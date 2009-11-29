@@ -22,7 +22,7 @@ if __name__ == '__main__':
         'echo.echo': echo
     }
 
-    gw = WSGIGateway(services, logger=logging)
+    gw = WSGIGateway(services, logger=logging, debug=True)
 
     httpd = simple_server.WSGIServer(
         ('localhost', 8000),

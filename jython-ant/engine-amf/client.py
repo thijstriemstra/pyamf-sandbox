@@ -15,4 +15,4 @@ gateway = RemotingService(url, logger=logging)
 echo_service = gateway.getService('echo.echo')
 result = echo_service('Hello world!')
 
-logging.info(result)
+logging.info('Result: ' + result)

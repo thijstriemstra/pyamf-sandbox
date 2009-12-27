@@ -16,7 +16,7 @@ if __name__ == '__main__':
     from wsgiref import simple_server
 
     logging.basicConfig(level=logging.DEBUG,
-           format='%(asctime)s %(levelname)-5.5s [%(name)s] %(message)s')
+           format='%(asctime)s %(levelname)-5.5s %(message)s')
 
     services = {
         'echo.echo': echo
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     httpd.set_app(gw)
 
-    print "Running AMF gateway on http://localhost:8000"
+    logging.info("Running AMF gateway on http://localhost:8000")
 
     try:
         httpd.serve_forever()

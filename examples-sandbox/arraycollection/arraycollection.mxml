@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	horizontalAlign="left" verticalAlign="top"
+	>
+	<mx:Script>
+		<![CDATA[
+		import flash.net.NetConnection;
+		import flash.net.Responder;
+
+	    private var gateway:NetConnection;
+	    public function send(): void
+	    {
+	        import mx.collections.ArrayCollection;
+	        gateway = new NetConnection();
+	
+            gateway.connect("http://localhost:8000/");
+
+            var param:ArrayCollection = new ArrayCollection([
+			{col1: 'value c', col2: 3},
+			{col1: 'value d', col2: 4}]);
+
+           var responder:Responder = new Responder(onResult, onFault);
+           gateway.call("acpb", responder, param);
+        }
+	private function onResult(result:*): void
+        {
+        	import mx.collections.ArrayCollection;
+        	import mx.controls.Alert;
+        	Alert.show(result);
+			collection = result;
+	    }
+        private function onFault(error:*): void
+        {
+            status_txt.text = "Remoting error: \n";
+            for ( var d:String in error ) {
+               status_txt.text += error[d] + "\n";
+            }
+        }
+	]]>
+	</mx:Script>
+
+	<mx:Script>
+	<![CDATA[
+	import mx.collections.ArrayCollection;
+	[Bindable]
+	public var collection:ArrayCollection = new ArrayCollection([
+	{col1: 'value a', col2: 1},
+	{col1: 'value b', col2: 2}
+	]);
+	]]>
+	</mx:Script>
+		<mx:DataGrid width="100%" height="100%" id="tblproc"
+		dataProvider="{collection}">
+		<mx:columns>
+		<mx:DataGridColumn headerText="col1" dataField="col1"/>
+		<mx:DataGridColumn headerText="col2" dataField="col2"/>
+		</mx:columns>
+		</mx:DataGrid>
+		<mx:TextArea width="100%" id="status_txt"/>
+		<mx:Button label="Refresh" id="bt1"  click="send()"/>
+</mx:Application>

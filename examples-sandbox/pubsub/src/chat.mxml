@@ -1,0 +1,93 @@
+<mx:Application layout="vertical"
+   xmlns:mx="http://www.adobe.com/2006/mxml"
+   applicationComplete="init()">
+  
+  <mx:Script>
+    <![CDATA[
+	  import mx.messaging.messages.ErrorMessage;
+	  import mx.messaging.messages.AcknowledgeMessage;
+      import mx.messaging.channels.AMFChannel;
+      import mx.messaging.Producer;
+      import mx.messaging.Consumer;
+      import mx.messaging.ChannelSet;
+      import mx.utils.ObjectUtil;
+      import mx.messaging.events.*;
+      import mx.messaging.messages.AsyncMessage;
+      import mx.messaging.messages.IMessage;
+
+      private var prod:Producer;
+      private var cons:Consumer;
+      private var amf:AMFChannel;
+      
+      private var destination:String = "PyAMFGateway";
+      private var gatewayId:String = "PyAMFMessagingGateway";
+      private var channelName:String = "pyamf-polling-amf";
+      private var gatewayUrl:String = "http://localhost:8000";
+      private var pollingInterval:int = 3000;
+      
+      private function init():void
+      {
+        // channel id and uri normally in services-config.xml
+        amf = new AMFChannel(channelName, gatewayUrl);
+        amf.piggybackingEnabled = true;
+        amf.pollingEnabled = true;
+        amf.pollingInterval = pollingInterval;
+        
+        prod = new Producer();
+        // destination id in messaging-config.xml
+        prod.destination = destination;
+        
+        prod.channelSet = new ChannelSet();
+        prod.channelSet.clustered = true;
+        prod.channelSet.addChannel(amf);
+        prod.addEventListener(MessageEvent.MESSAGE, messageHandler);
+        prod.addEventListener(MessageFaultEvent.FAULT, faultHandler);
+        prod.connect();
+
+        cons = new Consumer();
+        // destination id normally in messaging-config.xml
+        cons.destination = destination;
+
+        cons.channelSet = new ChannelSet();
+        cons.channelSet.addChannel(amf);
+        cons.addEventListener(MessageEvent.MESSAGE, messageHandler);
+        cons.addEventListener(MessageFaultEvent.FAULT, faultHandler);
+        //cons.addSubscription("myStock1", "operation IN ('BID', 'Ask')");
+        cons.subscribe();
+      }
+
+      private function sendMessage():void
+      {
+
+        var msg:IMessage = new AsyncMessage();
+        // set EventGateway id of PyAMF
+        msg.headers.gatewayid  = gatewayId;
+        msg.destination = "test";
+        msg.body = new Object();
+        msg.body.chatMessage = inText.text;
+        prod.send(msg);
+        inText.text = "";
+      }
+      
+      private function messageHandler(e:MessageEvent):void
+      {
+        trace(ObjectUtil.toString(e));
+        outText.text = e.message.body.chatMessage + "\n" + outText.text;
+      }
+      
+      private function faultHandler(e:MessageFaultEvent):void
+      {
+        trace(ObjectUtil.toString(e));
+       outText.text = e.faultString;
+      }
+    ]]>
+  </mx:Script>
+  
+  <mx:HBox>
+    <mx:TextInput id="inText" width="200" text="Hello World!" />
+    <mx:Button label="send" click="sendMessage()" />
+    <mx:Spacer height="20"/>
+    <mx:TextArea id="outText" width="240" height="300" />
+  </mx:HBox>
+  
+</mx:Application>

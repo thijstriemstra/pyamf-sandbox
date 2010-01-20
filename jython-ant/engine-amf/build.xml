@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="jython-test" basedir="." default="jython">
+
+    <property file="build.properties"/>
+    <property name="message" value="Hello World!"/>
+
+    <target name="jython" description="Start PyAMF server">
+	<script language="jython" src="${python.dir}/server.py">
+  		<classpath>
+    			<fileset dir="${lib.dir}" includes="*.jar" />
+  		</classpath>
+	</script>
+    </target>
+
+</project>

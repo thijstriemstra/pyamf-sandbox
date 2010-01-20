@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				horizontalAlign="left">
+				
+	<!-- This test app shows the various ways you can define and
+		 instantiate the RemoteObject class. -->
+		 
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.remoting.Operation;
+			import mx.messaging.ChannelSet;
+			import mx.messaging.channels.AMFChannel;
+			
+			private function helloscript():void
+			{
+				var channel:AMFChannel = new AMFChannel(null, gateway.text);
+				var channelSet:ChannelSet = new ChannelSet();
+	   			channelSet.addChannel(channel);
+	   		
+	   			var remoteObjAS:RemoteObject = new RemoteObject("RemoteObjectService");
+				remoteObjAS.source = "gateway.py";
+	   			remoteObjAS.channelSet = channelSet;
+	   		
+	   			var operation:Operation = remoteObjAS["hello"] as Operation;
+	   			operation.addEventListener( ResultEvent.RESULT, display );
+	   			operation.addEventListener( FaultEvent.FAULT, display );
+	  			operation.send();
+			}
+			
+			private function hellomxml():void
+			{
+				remoteObjMXML.destination="RemoteObjectService";
+				remoteObjMXML.endpoint = gateway.text;
+				remoteObjMXML.hello();
+			}
+			
+			private function hellomxmlxml():void
+			{
+				remoteObjMXMLXML.hello();
+			}
+  
+			private function display(result:*):void
+			{
+				output.text = "";
+			   	output.text += result.message.body + "\n"
+			   	output.text += result.toString() + "\n"
+			}
+		]]>
+	</mx:Script>
+
+	<mx:RemoteObject id="remoteObjMXML"
+					 fault="display(event)" result="display(event)"/>
+
+	<!-- To test the remoteobject below, comment out the  definition
+	     for 'remoteObjMXML' and the 'hellomxml' function above and add the
+	     following line to your compiler options: -services "services-config.xml" -->
+	<mx:RemoteObject id="remoteObjMXMLXML" destination="RemoteObjectService"
+					 fault="display(event)" result="display(event)"/>
+	
+	<mx:Panel title="PyAMF RemoteObject Destinations Test"
+			  paddingTop="10" paddingLeft="10" paddingRight="10"
+			  paddingBottom="10" width="100%" height="100%">
+		<mx:TextArea id="output" width="100%" height="100%"/>
+		<mx:ControlBar>
+			<mx:FormItem label="Gateway:" indicatorGap="3" paddingLeft="5">
+				<mx:TextInput id="gateway" text="http://localhost:8000"/>
+			</mx:FormItem>
+			<mx:Button label="Hello World (MXML)" click="hellomxml()" />
+			<mx:Button label="Hello World (MXML XML)" click="hellomxmlxml()" />
+			<mx:Button label="Hello World (AS)" click="helloscript()" />
+		</mx:ControlBar>
+	</mx:Panel>		 
+	
+</mx:Application>

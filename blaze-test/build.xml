@@ -1,0 +1,51 @@
+<project name="BlazeClient" default="dist" basedir=".">
+    <description>
+        Remoting client for Blaze DS.
+    </description>
+
+  <property name="src" location="src"/>
+  <property name="lib" location="lib"/>
+  <property name="build" location="build"/>
+  <property name="dist" location="dist"/>
+
+  <path id="libraries">
+		<fileset id="blaze-lib" dir="${lib}">
+			<include name="**.jar"/>
+		</fileset>
+  </path>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+  
+  <target name="init" depends="clean">
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <javac srcdir="${src}" destdir="${build}"
+           classpathref="libraries"/>
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <jar jarfile="${dist}/BlazeClient.jar" basedir="${build}">
+        <manifest>
+            <attribute name="Main-Class" value="RemotingClient"/>
+        </manifest>
+    </jar>
+  </target>
+
+  <target name="run" depends="dist">
+    <java fork="true" classname="RemotingClient">
+        <classpath>
+            <path refid="libraries"/>
+            <path location="${dist}/BlazeClient.jar"/>
+        </classpath>
+    </java>
+  </target>
+  
+</project>

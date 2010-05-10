@@ -10,7 +10,7 @@ public class RemotingClient
         AMFConnection amfConnection = new AMFConnection();
         
         String url = "http://demo.pyamf.org/gateway/echo";
-        String service = "service.getLanguages";
+        String service = "echo";
         try {
             amfConnection.connect(url);
         } catch (ClientStatusException cse) {
@@ -19,7 +19,7 @@ public class RemotingClient
         }
         // Make a remoting call and retrieve the result.
         try {
-            Object result = amfConnection.call(service);
+            Object result = amfConnection.call(service, "Hello world");
             System.out.println("results: " + result.toString());
         } catch (ClientStatusException cse) {
             System.out.println(cse);
